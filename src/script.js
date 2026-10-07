@@ -24,8 +24,10 @@ function getCategoryBadge(category) {
 }
 
 const ALL_CATEGORIES_LABEL = "すべて";
+const OUT_OF_STOCK_LABEL = "在庫なし";
 const CATEGORY_TABS = [
   ALL_CATEGORIES_LABEL,
+  OUT_OF_STOCK_LABEL,
   ...new Set(DUMMY_ITEMS.map((item) => item.category)),
 ];
 
@@ -34,6 +36,9 @@ let currentCategory = ALL_CATEGORIES_LABEL;
 function getFilteredItems() {
   if (currentCategory === ALL_CATEGORIES_LABEL) {
     return DUMMY_ITEMS;
+  }
+  if (currentCategory === OUT_OF_STOCK_LABEL) {
+    return DUMMY_ITEMS.filter((item) => item.status === "need_to_buy");
   }
   return DUMMY_ITEMS.filter((item) => item.category === currentCategory);
 }
