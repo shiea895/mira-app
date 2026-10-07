@@ -1,0 +1,79 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: #f5f5f5;
+  color: #222;
+}
+
+/* ヘッダー */
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  z-index: 10;
+}
+
+.app-header__title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.app-header__settings {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* メインコンテンツ（ヘッダー・下部ナビの高さだけ余白を確保） */
+.app-main {
+  padding: 72px 16px calc(64px + 16px);
+  min-height: 100vh;
+}
+
+/* 下部ナビゲーション */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  display: flex;
+  background: #ffffff;
+  border-top: 1px solid #e0e0e0;
+  z-index: 10;
+}
+
+.bottom-nav__item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: none;
+  border: none;
+  color: #777;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.bottom-nav__item.is-active {
+  color: #2d7cf0;
+}
+
+.bottom-nav__icon {
+  font-size: 20px;
+}
