@@ -24,7 +24,7 @@ function getCategoryBadge(category) {
 }
 
 const ALL_CATEGORIES_LABEL = "すべて";
-const OUT_OF_STOCK_LABEL = "在庫なし";
+const OUT_OF_STOCK_LABEL = "在庫切れ";
 const CATEGORY_TABS = [
   ALL_CATEGORIES_LABEL,
   OUT_OF_STOCK_LABEL,
