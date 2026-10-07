@@ -116,6 +116,12 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.item-tile:active .item-tile__icon {
+  transform: scale(0.96);
 }
 
 .item-tile__icon {
@@ -130,6 +136,7 @@ body {
   font-size: 24px;
   font-weight: bold;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  transition: transform 0.1s, filter 0.15s;
 }
 
 /* 在庫切れ（要購入）はモノクロ表示にして一目で分かるようにする */

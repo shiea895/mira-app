@@ -76,9 +76,15 @@ function renderItemList(items) {
   container.appendChild(grid);
 }
 
+function toggleItemStatus(item) {
+  item.status = item.status === "in_stock" ? "need_to_buy" : "in_stock";
+  renderItemList(getFilteredItems());
+}
+
 function renderItemTile(item) {
   const tile = document.createElement("div");
   tile.className = "item-tile";
+  tile.addEventListener("click", () => toggleItemStatus(item));
 
   const icon = document.createElement("div");
   icon.className =
