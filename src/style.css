@@ -78,56 +78,71 @@ body {
   font-size: 20px;
 }
 
-/* アイテム一覧（S2ホーム画面） */
-.item-list__category {
-  margin: 20px 0 8px;
-  font-size: 14px;
-  color: #777;
+/* アイテム一覧（S2ホーム画面）: 横3列のグリッド表示 */
+.item-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px 10px;
 }
 
-.item-list__category:first-child {
-  margin-top: 0;
-}
-
-.item-card {
+.item-tile {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  padding: 12px;
-  margin-bottom: 8px;
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
-.item-card__icon {
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
+.item-tile__icon {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  background: #e8eef7;
+  color: #2d7cf0;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
-  background: #e8eef7;
-  color: #2d7cf0;
+  font-size: 24px;
   font-weight: bold;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
-.item-card__name {
-  flex: 1;
-  font-size: 15px;
+/* 在庫切れ（要購入）はモノクロ表示にして一目で分かるようにする */
+.item-tile__icon--out-of-stock {
+  filter: grayscale(100%);
+  opacity: 0.7;
 }
 
-.item-card__badge {
-  flex-shrink: 0;
-  padding: 4px 8px;
-  border-radius: 12px;
+.item-tile__name {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
   font-size: 12px;
-  background: #eeeeee;
-  color: #555;
+  line-height: 1.3;
+  text-align: center;
 }
 
-.item-card__badge--need-to-buy {
-  background: #fdeaea;
-  color: #d23;
+.item-tile__category-badge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.item-tile__category-badge--food {
+  background: #e08a2c;
+}
+
+.item-tile__category-badge--daily {
+  background: #2d7cf0;
+}
+
+.item-tile__category-badge--other {
+  background: #888888;
 }

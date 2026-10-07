@@ -8,61 +8,55 @@ const DUMMY_ITEMS = [
   { id: 4, name: "トイレットペーパー", category: "日用品", status: "need_to_buy" },
   { id: 5, name: "洗剤", category: "日用品", status: "in_stock" },
   { id: 6, name: "ティッシュ", category: "日用品", status: "need_to_buy" },
+  { id: 7, name: "電池", category: "その他", status: "in_stock" },
+  { id: 8, name: "輪ゴム", category: "その他", status: "need_to_buy" },
+  { id: 9, name: "パン", category: "食品", status: "in_stock" },
 ];
 
-const STATUS_LABEL = {
-  in_stock: "在庫あり",
-  need_to_buy: "在庫切れ・要購入",
+const CATEGORY_BADGE = {
+  食品: { label: "食", className: "food" },
+  日用品: { label: "日", className: "daily" },
 };
+const DEFAULT_CATEGORY_BADGE = { label: "他", className: "other" };
 
-function groupByCategory(items) {
-  const groups = new Map();
-  for (const item of items) {
-    if (!groups.has(item.category)) {
-      groups.set(item.category, []);
-    }
-    groups.get(item.category).push(item);
-  }
-  return groups;
+function getCategoryBadge(category) {
+  return CATEGORY_BADGE[category] || DEFAULT_CATEGORY_BADGE;
 }
 
 function renderItemList(items) {
   const container = document.getElementById("item-list");
   container.innerHTML = "";
 
-  const groups = groupByCategory(items);
-  for (const [category, categoryItems] of groups) {
-    const heading = document.createElement("h2");
-    heading.className = "item-list__category";
-    heading.textContent = category;
-    container.appendChild(heading);
-
-    for (const item of categoryItems) {
-      container.appendChild(renderItemCard(item));
-    }
+  const grid = document.createElement("div");
+  grid.className = "item-grid";
+  for (const item of items) {
+    grid.appendChild(renderItemTile(item));
   }
+  container.appendChild(grid);
 }
 
-function renderItemCard(item) {
-  const card = document.createElement("div");
-  card.className = "item-card";
+function renderItemTile(item) {
+  const tile = document.createElement("div");
+  tile.className = "item-tile";
 
   const icon = document.createElement("div");
-  icon.className = "item-card__icon";
+  icon.className =
+    "item-tile__icon" +
+    (item.status === "need_to_buy" ? " item-tile__icon--out-of-stock" : "");
   icon.textContent = item.name.charAt(0);
 
-  const name = document.createElement("span");
-  name.className = "item-card__name";
-  name.textContent = item.name;
+  const name = document.createElement("div");
+  name.className = "item-tile__name";
 
+  const categoryBadge = getCategoryBadge(item.category);
   const badge = document.createElement("span");
-  badge.className =
-    "item-card__badge" +
-    (item.status === "need_to_buy" ? " item-card__badge--need-to-buy" : "");
-  badge.textContent = STATUS_LABEL[item.status];
+  badge.className = `item-tile__category-badge item-tile__category-badge--${categoryBadge.className}`;
+  badge.textContent = categoryBadge.label;
 
-  card.append(icon, name, badge);
-  return card;
+  name.append(badge, document.createTextNode(item.name));
+
+  tile.append(icon, name);
+  return tile;
 }
 
 renderItemList(DUMMY_ITEMS);
