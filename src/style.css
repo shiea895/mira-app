@@ -78,6 +78,33 @@ body {
   font-size: 20px;
 }
 
+/* カテゴリタブ（S2ホーム画面） */
+.category-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.category-tabs__item {
+  flex-shrink: 0;
+  padding: 6px 14px;
+  border-radius: 16px;
+  border: 1px solid #ddd;
+  background: #ffffff;
+  color: #555;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.category-tabs__item.is-active {
+  background: #2d7cf0;
+  border-color: #2d7cf0;
+  color: #ffffff;
+}
+
 /* アイテム一覧（S2ホーム画面）: 横3列のグリッド表示 */
 .item-grid {
   display: grid;

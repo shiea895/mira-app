@@ -23,6 +23,42 @@ function getCategoryBadge(category) {
   return CATEGORY_BADGE[category] || DEFAULT_CATEGORY_BADGE;
 }
 
+const ALL_CATEGORIES_LABEL = "すべて";
+const CATEGORY_TABS = [
+  ALL_CATEGORIES_LABEL,
+  ...new Set(DUMMY_ITEMS.map((item) => item.category)),
+];
+
+let currentCategory = ALL_CATEGORIES_LABEL;
+
+function getFilteredItems() {
+  if (currentCategory === ALL_CATEGORIES_LABEL) {
+    return DUMMY_ITEMS;
+  }
+  return DUMMY_ITEMS.filter((item) => item.category === currentCategory);
+}
+
+function renderCategoryTabs() {
+  const container = document.getElementById("category-tabs");
+  container.innerHTML = "";
+
+  for (const category of CATEGORY_TABS) {
+    const tab = document.createElement("button");
+    tab.type = "button";
+    tab.className =
+      "category-tabs__item" +
+      (category === currentCategory ? " is-active" : "");
+    tab.textContent = category;
+    tab.addEventListener("click", () => {
+      if (category === currentCategory) return;
+      currentCategory = category;
+      renderCategoryTabs();
+      renderItemList(getFilteredItems());
+    });
+    container.appendChild(tab);
+  }
+}
+
 function renderItemList(items) {
   const container = document.getElementById("item-list");
   container.innerHTML = "";
@@ -59,4 +95,5 @@ function renderItemTile(item) {
   return tile;
 }
 
-renderItemList(DUMMY_ITEMS);
+renderCategoryTabs();
+renderItemList(getFilteredItems());
