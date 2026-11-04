@@ -38,6 +38,37 @@ function generateItemId() {
 let items = loadItems();
 saveItems(); // 初回起動時はDEFAULT_ITEMSをそのまま保存データとして確定させる
 
+// アイコン使い回し用の履歴（ステップ13）
+const ICON_HISTORY_STORAGE_KEY = "mira-app:icon-history";
+const ICON_HISTORY_MAX = 24;
+
+function loadIconHistory() {
+  try {
+    const raw = localStorage.getItem(ICON_HISTORY_STORAGE_KEY);
+    if (raw) {
+      return JSON.parse(raw);
+    }
+  } catch (error) {
+    console.error("アイコン履歴の読み込みに失敗しました", error);
+  }
+  return [];
+}
+
+function saveIconHistory() {
+  localStorage.setItem(ICON_HISTORY_STORAGE_KEY, JSON.stringify(iconHistory));
+}
+
+// 選択されたアイコンを履歴の先頭に追加する(既にあれば先頭へ移動するだけ)
+function addIconToHistory(url) {
+  if (!url) return;
+  iconHistory = iconHistory.filter((entry) => entry.url !== url);
+  iconHistory.unshift({ id: generateItemId(), url, createdAt: Date.now() });
+  iconHistory = iconHistory.slice(0, ICON_HISTORY_MAX);
+  saveIconHistory();
+}
+
+let iconHistory = loadIconHistory();
+
 // カテゴリ（ステップ11: S6で追加・削除・並び替えができる）
 const CATEGORY_STORAGE_KEY = "mira-app:categories";
 const DEFAULT_CATEGORIES = [
@@ -589,8 +620,15 @@ function closeIconPicker() {
 
 function confirmIconPicker() {
   formState.iconUrl = iconPickerTempUrl;
+  addIconToHistory(iconPickerTempUrl);
   updateItemFormIconPreview();
   closeIconPicker();
+}
+
+function selectIconFromHistory(url) {
+  iconPickerTempUrl = url;
+  renderIconPickerPreview();
+  renderIconHistoryGrid();
 }
 
 function renderIconPickerPreview() {
@@ -629,12 +667,33 @@ document.getElementById("icon-picker-file-btn").addEventListener("click", () => 
 document.getElementById("icon-picker-camera-input").addEventListener("change", handleIconFileSelected);
 document.getElementById("icon-picker-file-input").addEventListener("change", handleIconFileSelected);
 
-// 登録済みアイコンの一覧表示・再利用はステップ13で実装する
+// ステップ13: 一度選んだアイコンを履歴から再選択できるようにする
 function renderIconHistoryGrid() {
   const container = document.getElementById("icon-picker-history-grid");
   container.innerHTML = "";
-  const empty = document.createElement("p");
-  empty.className = "icon-picker__history-empty";
-  empty.textContent = "まだ登録済みのアイコンはありません";
-  container.appendChild(empty);
+
+  if (iconHistory.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "icon-picker__history-empty";
+    empty.textContent = "まだ登録済みのアイコンはありません";
+    container.appendChild(empty);
+    return;
+  }
+
+  for (const entry of iconHistory) {
+    const item = document.createElement("button");
+    item.type = "button";
+    item.className =
+      "icon-picker__history-item" +
+      (entry.url === iconPickerTempUrl ? " is-selected" : "");
+    item.setAttribute("aria-label", "登録済みアイコンを選択");
+
+    const img = document.createElement("img");
+    img.src = entry.url;
+    img.alt = "";
+    item.appendChild(img);
+
+    item.addEventListener("click", () => selectIconFromHistory(entry.url));
+    container.appendChild(item);
+  }
 }
