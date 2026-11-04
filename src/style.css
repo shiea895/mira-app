@@ -37,6 +37,11 @@ body {
   cursor: pointer;
 }
 
+.app-header__spacer {
+  display: inline-block;
+  width: 28px;
+}
+
 .app-header__count {
   font-size: 13px;
   color: #777;
@@ -84,12 +89,32 @@ body {
 }
 
 /* カテゴリタブ（S2ホーム画面） */
+.category-tabs-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
 .category-tabs {
   display: flex;
   gap: 8px;
-  margin-bottom: 16px;
+  flex: 1;
+  min-width: 0;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+}
+
+.category-manage-btn {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  background: #ffffff;
+  color: #555;
+  font-size: 15px;
+  cursor: pointer;
 }
 
 .category-tabs__item {
@@ -195,18 +220,6 @@ body {
   font-size: 10px;
   font-weight: bold;
   color: #ffffff;
-}
-
-.item-tile__category-badge--food {
-  background: #e08a2c;
-}
-
-.item-tile__category-badge--daily {
-  background: #2d7cf0;
-}
-
-.item-tile__category-badge--other {
-  background: #888888;
 }
 
 /* フローティングアクションボタン（S2ホーム画面） */
@@ -411,5 +424,80 @@ body {
   background: #ffffff;
   color: #d23;
   font-size: 14px;
+  cursor: pointer;
+}
+
+/* S6: カテゴリ管理画面 */
+.category-manage-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.category-manage-row__badge {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.category-manage-row__name {
+  flex: 1;
+  font-size: 15px;
+}
+
+.category-manage-row__move,
+.category-manage-row__delete {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #555;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.category-manage-row__move:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.category-manage-row__delete {
+  border-color: #e57373;
+  color: #d23;
+}
+
+.category-manage-add {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.category-manage-add .item-form__input {
+  flex: 1;
+}
+
+.category-manage-add__btn {
+  flex-shrink: 0;
+  padding: 0 16px;
+  border: none;
+  border-radius: 8px;
+  background: #2d7cf0;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: bold;
   cursor: pointer;
 }
