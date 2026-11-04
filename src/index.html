@@ -22,11 +22,38 @@
     <button id="fab-add-item" class="fab" type="button" aria-label="アイテムを追加">＋</button>
 
     <nav class="bottom-nav">
-      <button class="bottom-nav__item is-active" type="button">
+      <button class="bottom-nav__item is-active" type="button" data-screen="screen-home">
         <span class="bottom-nav__icon">🏠</span>
         <span class="bottom-nav__label">ホーム</span>
       </button>
+      <button class="bottom-nav__item" type="button" data-screen="screen-shopping">
+        <span class="bottom-nav__icon">🛒</span>
+        <span class="bottom-nav__label">買い物リスト</span>
+      </button>
       <button class="bottom-nav__item" type="button">
+        <span class="bottom-nav__icon">⚙</span>
+        <span class="bottom-nav__label">設定</span>
+      </button>
+    </nav>
+  </section>
+
+  <!-- S3: 買い物リスト画面 -->
+  <section id="screen-shopping" class="screen" hidden>
+    <header class="app-header">
+      <span class="app-header__title">買い物リスト</span>
+      <span id="shopping-count" class="app-header__count"></span>
+    </header>
+
+    <main class="app-main">
+      <div id="shopping-list"></div>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="bottom-nav__item" type="button" data-screen="screen-home">
+        <span class="bottom-nav__icon">🏠</span>
+        <span class="bottom-nav__label">ホーム</span>
+      </button>
+      <button class="bottom-nav__item is-active" type="button" data-screen="screen-shopping">
         <span class="bottom-nav__icon">🛒</span>
         <span class="bottom-nav__label">買い物リスト</span>
       </button>

@@ -152,14 +152,101 @@ function renderItemTile(item) {
 renderCategoryTabs();
 renderItemList(getFilteredItems());
 
-// S4 アイテム登録・編集画面
-let formState = null; // { id, name, category, status, memo } / idがnullなら新規追加
+// S3 買い物リスト画面: 「在庫切れ・要購入」のアイテムだけのチェックリスト
+function groupByCategory(itemsToGroup) {
+  const groups = new Map();
+  for (const item of itemsToGroup) {
+    if (!groups.has(item.category)) {
+      groups.set(item.category, []);
+    }
+    groups.get(item.category).push(item);
+  }
+  return groups;
+}
 
+function markItemAsPurchased(item) {
+  item.status = "in_stock";
+  saveItems();
+  renderShoppingList();
+  renderItemList(getFilteredItems());
+}
+
+function renderShoppingItemRow(item) {
+  const row = document.createElement("label");
+  row.className = "shopping-item";
+
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.className = "shopping-item__checkbox";
+  checkbox.addEventListener("change", () => markItemAsPurchased(item));
+
+  const icon = document.createElement("span");
+  icon.className = "shopping-item__icon";
+  icon.textContent = item.name.charAt(0);
+
+  const name = document.createElement("span");
+  name.className = "shopping-item__name";
+  name.textContent = item.name;
+
+  row.append(checkbox, icon, name);
+  return row;
+}
+
+function renderShoppingList() {
+  const container = document.getElementById("shopping-list");
+  container.innerHTML = "";
+
+  const shoppingItems = items.filter((item) => item.status === "need_to_buy");
+  document.getElementById("shopping-count").textContent =
+    shoppingItems.length > 0 ? `${shoppingItems.length}件` : "";
+
+  if (shoppingItems.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "shopping-list__empty";
+    empty.textContent = "買うものはありません";
+    container.appendChild(empty);
+    return;
+  }
+
+  const groups = groupByCategory(shoppingItems);
+  for (const [category, categoryItems] of groups) {
+    const heading = document.createElement("h2");
+    heading.className = "shopping-list__category";
+    heading.textContent = category;
+    container.appendChild(heading);
+
+    for (const item of categoryItems) {
+      container.appendChild(renderShoppingItemRow(item));
+    }
+  }
+}
+
+// 画面遷移（下部ナビゲーション）
 function showScreen(screenId) {
   for (const screen of document.querySelectorAll(".screen")) {
     screen.hidden = screen.id !== screenId;
   }
 }
+
+function navigateTo(screenId) {
+  showScreen(screenId);
+  document.querySelectorAll(".bottom-nav__item[data-screen]").forEach((btn) => {
+    btn.classList.toggle("is-active", btn.dataset.screen === screenId);
+  });
+
+  if (screenId === "screen-home") {
+    renderItemList(getFilteredItems());
+  } else if (screenId === "screen-shopping") {
+    renderShoppingList();
+  }
+}
+
+document.querySelectorAll(".bottom-nav__item[data-screen]").forEach((btn) => {
+  btn.addEventListener("click", () => navigateTo(btn.dataset.screen));
+});
+
+// S4 アイテム登録・編集画面
+let formState = null; // { id, name, category, status, memo } / idがnullなら新規追加
 
 function openItemForm(item) {
   formState = item

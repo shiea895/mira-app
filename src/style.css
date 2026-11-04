@@ -37,6 +37,11 @@ body {
   cursor: pointer;
 }
 
+.app-header__count {
+  font-size: 13px;
+  color: #777;
+}
+
 /* メインコンテンツ（ヘッダー・下部ナビの高さだけ余白を確保） */
 .app-main {
   padding: 72px 16px calc(64px + 16px);
@@ -225,6 +230,61 @@ body {
 /* 画面切り替え: hidden属性が付いた画面は非表示 */
 .screen[hidden] {
   display: none;
+}
+
+/* S3: 買い物リスト画面 */
+.shopping-list__category {
+  margin: 20px 0 8px;
+  font-size: 14px;
+  color: #777;
+}
+
+.shopping-list__category:first-child {
+  margin-top: 0;
+}
+
+.shopping-list__empty {
+  margin-top: 40px;
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+}
+
+.shopping-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  margin-bottom: 8px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+}
+
+.shopping-item__checkbox {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+
+.shopping-item__icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #e8eef7;
+  color: #2d7cf0;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.shopping-item__name {
+  flex: 1;
+  font-size: 15px;
 }
 
 /* S4: アイテム登録・編集画面 */
