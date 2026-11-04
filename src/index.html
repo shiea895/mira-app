@@ -86,6 +86,33 @@
     </main>
   </section>
 
+  <!-- S5: アイコン選択画面 -->
+  <section id="screen-icon-picker" class="screen" hidden>
+    <header class="app-header">
+      <button id="icon-picker-cancel" class="app-header__back" type="button" aria-label="キャンセル">←</button>
+      <span class="app-header__title">アイコンを選択</span>
+      <button id="icon-picker-confirm" class="app-header__save" type="button">決定</button>
+    </header>
+
+    <main class="app-main">
+      <div class="icon-picker__preview-wrap">
+        <div id="icon-picker-preview" class="item-tile__icon icon-picker__preview"></div>
+      </div>
+
+      <div class="icon-picker__actions">
+        <button id="icon-picker-camera-btn" class="icon-picker__action-btn" type="button">📷 カメラで撮影</button>
+        <button id="icon-picker-file-btn" class="icon-picker__action-btn" type="button">🖼 写真から選択</button>
+      </div>
+      <input id="icon-picker-camera-input" type="file" accept="image/*" capture="environment" hidden>
+      <input id="icon-picker-file-input" type="file" accept="image/*" hidden>
+
+      <div class="icon-picker__history">
+        <span class="item-form__label">登録済みアイコンから選ぶ</span>
+        <div id="icon-picker-history-grid" class="icon-picker__history-grid"></div>
+      </div>
+    </main>
+  </section>
+
   <!-- S4: アイテム登録・編集画面 -->
   <section id="screen-item-form" class="screen" hidden>
     <header class="app-header">
@@ -96,8 +123,8 @@
 
     <main class="app-main">
       <div class="item-form__icon-preview-wrap">
-        <div id="item-form-icon-preview" class="item-tile__icon item-form__icon-preview"></div>
-        <p class="item-form__icon-hint">アイコンはステップ12以降で変更できるようになります</p>
+        <button id="item-form-icon-preview-btn" class="item-tile__icon item-form__icon-preview" type="button" aria-label="アイコンを選択"></button>
+        <p class="item-form__icon-hint">タップしてアイコンを選択</p>
       </div>
 
       <label class="item-form__field">

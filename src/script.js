@@ -147,6 +147,19 @@ function toggleItemStatus(item) {
   renderItemList(getFilteredItems());
 }
 
+// アイコン画像(iconUrl)が設定されていればそれを、無ければ頭文字を表示する共通処理
+function setIconVisual(el, { iconUrl, name }) {
+  el.innerHTML = "";
+  if (iconUrl) {
+    const img = document.createElement("img");
+    img.src = iconUrl;
+    img.alt = "";
+    el.appendChild(img);
+  } else {
+    el.textContent = name.charAt(0);
+  }
+}
+
 function renderItemTile(item) {
   const tile = document.createElement("div");
   tile.className = "item-tile";
@@ -159,7 +172,7 @@ function renderItemTile(item) {
   icon.className =
     "item-tile__icon" +
     (item.status === "need_to_buy" ? " item-tile__icon--out-of-stock" : "");
-  icon.textContent = item.name.charAt(0);
+  setIconVisual(icon, item);
 
   const editButton = document.createElement("button");
   editButton.type = "button";
@@ -243,7 +256,7 @@ function renderShoppingItemRow(item) {
 
   const icon = document.createElement("span");
   icon.className = "shopping-item__icon";
-  icon.textContent = item.name.charAt(0);
+  setIconVisual(icon, item);
 
   const name = document.createElement("span");
   name.className = "shopping-item__name";
@@ -415,12 +428,26 @@ document.getElementById("category-manage-back").addEventListener("click", closeC
 document.getElementById("category-manage-add-btn").addEventListener("click", addCategory);
 
 // S4 アイテム登録・編集画面
-let formState = null; // { id, name, category, status, memo } / idがnullなら新規追加
+let formState = null; // { id, name, category, status, memo, iconUrl } / idがnullなら新規追加
 
 function openItemForm(item) {
   formState = item
-    ? { id: item.id, name: item.name, category: item.category, status: item.status, memo: item.memo || "" }
-    : { id: null, name: "", category: categories[0] ? categories[0].name : "", status: "in_stock", memo: "" };
+    ? {
+        id: item.id,
+        name: item.name,
+        category: item.category,
+        status: item.status,
+        memo: item.memo || "",
+        iconUrl: item.iconUrl || null,
+      }
+    : {
+        id: null,
+        name: "",
+        category: categories[0] ? categories[0].name : "",
+        status: "in_stock",
+        memo: "",
+        iconUrl: null,
+      };
 
   document.getElementById("item-form-title").textContent = item ? "アイテムを編集" : "アイテムを追加";
   document.getElementById("item-form-delete").hidden = !item;
@@ -440,11 +467,14 @@ function closeItemForm() {
 }
 
 function updateItemFormIconPreview() {
-  const preview = document.getElementById("item-form-icon-preview");
-  preview.textContent = formState.name.charAt(0) || "？";
+  const preview = document.getElementById("item-form-icon-preview-btn");
   preview.className =
     "item-tile__icon item-form__icon-preview" +
     (formState.status === "need_to_buy" ? " item-tile__icon--out-of-stock" : "");
+  setIconVisual(preview, {
+    iconUrl: formState.iconUrl,
+    name: formState.name || "？",
+  });
 }
 
 function renderItemFormCategoryChips() {
@@ -500,6 +530,7 @@ function saveItemForm() {
       category: formState.category,
       status: formState.status,
       memo: formState.memo,
+      iconUrl: formState.iconUrl,
     });
   } else {
     const target = items.find((item) => item.id === formState.id);
@@ -508,6 +539,7 @@ function saveItemForm() {
       target.category = formState.category;
       target.status = formState.status;
       target.memo = formState.memo;
+      target.iconUrl = formState.iconUrl;
     }
   }
 
@@ -530,6 +562,7 @@ document.getElementById("fab-add-item").addEventListener("click", () => openItem
 document.getElementById("item-form-cancel").addEventListener("click", closeItemForm);
 document.getElementById("item-form-save").addEventListener("click", saveItemForm);
 document.getElementById("item-form-delete").addEventListener("click", deleteItemForm);
+document.getElementById("item-form-icon-preview-btn").addEventListener("click", openIconPicker);
 
 document.getElementById("item-form-name").addEventListener("input", (event) => {
   formState.name = event.target.value;
@@ -539,3 +572,69 @@ document.getElementById("item-form-name").addEventListener("input", (event) => {
 document.getElementById("item-form-memo").addEventListener("input", (event) => {
   formState.memo = event.target.value;
 });
+
+// S5 アイコン選択画面
+let iconPickerTempUrl = null;
+
+function openIconPicker() {
+  iconPickerTempUrl = formState.iconUrl;
+  renderIconPickerPreview();
+  renderIconHistoryGrid();
+  showScreen("screen-icon-picker");
+}
+
+function closeIconPicker() {
+  showScreen("screen-item-form");
+}
+
+function confirmIconPicker() {
+  formState.iconUrl = iconPickerTempUrl;
+  updateItemFormIconPreview();
+  closeIconPicker();
+}
+
+function renderIconPickerPreview() {
+  const preview = document.getElementById("icon-picker-preview");
+  setIconVisual(preview, { iconUrl: iconPickerTempUrl, name: formState.name || "？" });
+}
+
+function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
+
+async function handleIconFileSelected(event) {
+  const file = event.target.files[0];
+  event.target.value = ""; // 同じファイルを連続で選んだ時も change イベントが発火するように
+  if (!file) return;
+
+  const dataUrl = await readFileAsDataUrl(file);
+  iconPickerTempUrl = dataUrl;
+  renderIconPickerPreview();
+}
+
+document.getElementById("icon-picker-cancel").addEventListener("click", closeIconPicker);
+document.getElementById("icon-picker-confirm").addEventListener("click", confirmIconPicker);
+
+document.getElementById("icon-picker-camera-btn").addEventListener("click", () => {
+  document.getElementById("icon-picker-camera-input").click();
+});
+document.getElementById("icon-picker-file-btn").addEventListener("click", () => {
+  document.getElementById("icon-picker-file-input").click();
+});
+document.getElementById("icon-picker-camera-input").addEventListener("change", handleIconFileSelected);
+document.getElementById("icon-picker-file-input").addEventListener("change", handleIconFileSelected);
+
+// 登録済みアイコンの一覧表示・再利用はステップ13で実装する
+function renderIconHistoryGrid() {
+  const container = document.getElementById("icon-picker-history-grid");
+  container.innerHTML = "";
+  const empty = document.createElement("p");
+  empty.className = "icon-picker__history-empty";
+  empty.textContent = "まだ登録済みのアイコンはありません";
+  container.appendChild(empty);
+}
