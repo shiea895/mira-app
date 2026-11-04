@@ -226,7 +226,12 @@ function renderItemTile(item) {
   badge.style.backgroundColor = categoryBadge.color;
   badge.textContent = categoryBadge.label;
 
-  name.append(badge, document.createTextNode(item.name));
+  const nameText = document.createElement("span");
+  nameText.className = "item-tile__name-text";
+  nameText.textContent = item.name;
+  nameText.title = item.name; // 省略表示時に長押し/ホバーで全文を確認できるように
+
+  name.append(badge, nameText);
 
   tile.append(iconWrap, name);
   return tile;
