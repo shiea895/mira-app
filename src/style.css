@@ -287,6 +287,33 @@ body {
   font-size: 15px;
 }
 
+.shopping-item.is-checked {
+  background: #eef6ee;
+}
+
+.shopping-item.is-checked .shopping-item__name {
+  color: #999;
+  text-decoration: line-through;
+}
+
+.finish-shopping-btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 16px;
+  border: none;
+  border-radius: 8px;
+  background: #2d7cf0;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.finish-shopping-btn:disabled {
+  background: #c8d6ea;
+  cursor: default;
+}
+
 /* S4: アイテム登録・編集画面 */
 .app-header__back {
   background: none;

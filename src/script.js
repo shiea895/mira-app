@@ -164,21 +164,43 @@ function groupByCategory(itemsToGroup) {
   return groups;
 }
 
-function markItemAsPurchased(item) {
-  item.status = "in_stock";
+// チェックは「買い物かごに入れた」印にとどめ、実際の在庫反映は「買い物終了」ボタンでまとめて行う
+const checkedForPurchase = new Set();
+
+function toggleShoppingCheck(item) {
+  if (checkedForPurchase.has(item.id)) {
+    checkedForPurchase.delete(item.id);
+  } else {
+    checkedForPurchase.add(item.id);
+  }
+  renderShoppingList();
+}
+
+function finishShopping() {
+  if (checkedForPurchase.size === 0) return;
+
+  for (const item of items) {
+    if (checkedForPurchase.has(item.id)) {
+      item.status = "in_stock";
+    }
+  }
+  checkedForPurchase.clear();
   saveItems();
   renderShoppingList();
   renderItemList(getFilteredItems());
 }
 
 function renderShoppingItemRow(item) {
+  const isChecked = checkedForPurchase.has(item.id);
+
   const row = document.createElement("label");
-  row.className = "shopping-item";
+  row.className = "shopping-item" + (isChecked ? " is-checked" : "");
 
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
   checkbox.className = "shopping-item__checkbox";
-  checkbox.addEventListener("change", () => markItemAsPurchased(item));
+  checkbox.checked = isChecked;
+  checkbox.addEventListener("change", () => toggleShoppingCheck(item));
 
   const icon = document.createElement("span");
   icon.className = "shopping-item__icon";
@@ -200,11 +222,14 @@ function renderShoppingList() {
   document.getElementById("shopping-count").textContent =
     shoppingItems.length > 0 ? `${shoppingItems.length}件` : "";
 
+  const finishButton = document.getElementById("finish-shopping-btn");
+
   if (shoppingItems.length === 0) {
     const empty = document.createElement("p");
     empty.className = "shopping-list__empty";
     empty.textContent = "買うものはありません";
     container.appendChild(empty);
+    finishButton.hidden = true;
     return;
   }
 
@@ -219,7 +244,16 @@ function renderShoppingList() {
       container.appendChild(renderShoppingItemRow(item));
     }
   }
+
+  finishButton.hidden = false;
+  finishButton.disabled = checkedForPurchase.size === 0;
+  finishButton.textContent =
+    checkedForPurchase.size > 0
+      ? `買い物終了（${checkedForPurchase.size}件を在庫ありにする）`
+      : "買い物終了";
 }
+
+document.getElementById("finish-shopping-btn").addEventListener("click", finishShopping);
 
 // 画面遷移（下部ナビゲーション）
 function showScreen(screenId) {
