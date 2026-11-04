@@ -108,3 +108,105 @@ function renderItemTile(item) {
 
 renderCategoryTabs();
 renderItemList(getFilteredItems());
+
+// ステップ7: S4 アイテム登録・編集画面（静的UI。保存処理はステップ8で実装）
+const FORM_CATEGORIES = ["食品", "日用品", "その他"];
+const STATUS_OPTIONS = [
+  { value: "in_stock", label: "在庫あり" },
+  { value: "need_to_buy", label: "在庫切れ・要購入" },
+];
+
+let formState = null; // { name, category, status, memo }
+
+function showScreen(screenId) {
+  for (const screen of document.querySelectorAll(".screen")) {
+    screen.hidden = screen.id !== screenId;
+  }
+}
+
+function openItemForm() {
+  formState = {
+    name: "",
+    category: FORM_CATEGORIES[0],
+    status: "in_stock",
+    memo: "",
+  };
+
+  document.getElementById("item-form-title").textContent = "アイテムを追加";
+  document.getElementById("item-form-delete").hidden = true;
+  document.getElementById("item-form-name").value = formState.name;
+  document.getElementById("item-form-memo").value = formState.memo;
+
+  renderItemFormCategoryChips();
+  renderItemFormStatusChips();
+  updateItemFormIconPreview();
+
+  showScreen("screen-item-form");
+}
+
+function closeItemForm() {
+  formState = null;
+  showScreen("screen-home");
+}
+
+function updateItemFormIconPreview() {
+  const preview = document.getElementById("item-form-icon-preview");
+  preview.textContent = formState.name.charAt(0) || "？";
+  preview.className =
+    "item-tile__icon item-form__icon-preview" +
+    (formState.status === "need_to_buy" ? " item-tile__icon--out-of-stock" : "");
+}
+
+function renderItemFormCategoryChips() {
+  const container = document.getElementById("item-form-category");
+  container.innerHTML = "";
+
+  for (const category of FORM_CATEGORIES) {
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className =
+      "item-form__chip" +
+      (category === formState.category ? " is-selected" : "");
+    chip.textContent = category;
+    chip.addEventListener("click", () => {
+      formState.category = category;
+      renderItemFormCategoryChips();
+    });
+    container.appendChild(chip);
+  }
+}
+
+function renderItemFormStatusChips() {
+  const container = document.getElementById("item-form-status");
+  container.innerHTML = "";
+
+  for (const option of STATUS_OPTIONS) {
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className =
+      "item-form__chip" +
+      (option.value === formState.status ? " is-selected" : "");
+    chip.textContent = option.label;
+    chip.addEventListener("click", () => {
+      formState.status = option.value;
+      renderItemFormStatusChips();
+      updateItemFormIconPreview();
+    });
+    container.appendChild(chip);
+  }
+}
+
+document.getElementById("fab-add-item").addEventListener("click", openItemForm);
+document.getElementById("item-form-cancel").addEventListener("click", closeItemForm);
+
+document.getElementById("item-form-name").addEventListener("input", (event) => {
+  formState.name = event.target.value;
+  updateItemFormIconPreview();
+});
+
+document.getElementById("item-form-memo").addEventListener("input", (event) => {
+  formState.memo = event.target.value;
+});
+
+// 保存の実データ反映（DUMMY_ITEMSへの追加・永続化）はステップ8で実装する
+document.getElementById("item-form-save").addEventListener("click", closeItemForm);

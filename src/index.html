@@ -7,30 +7,73 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="app-header">
-    <span class="app-header__title">買い物リスト</span>
-    <button class="app-header__settings" type="button" aria-label="設定">⚙</button>
-  </header>
+  <!-- S2: ホーム画面（在庫リスト） -->
+  <section id="screen-home" class="screen">
+    <header class="app-header">
+      <span class="app-header__title">買い物リスト</span>
+      <button class="app-header__settings" type="button" aria-label="設定">⚙</button>
+    </header>
 
-  <main class="app-main">
-    <div id="category-tabs" class="category-tabs"></div>
-    <div id="item-list" class="item-list"></div>
-  </main>
+    <main class="app-main">
+      <div id="category-tabs" class="category-tabs"></div>
+      <div id="item-list" class="item-list"></div>
+    </main>
 
-  <nav class="bottom-nav">
-    <button class="bottom-nav__item is-active" type="button">
-      <span class="bottom-nav__icon">🏠</span>
-      <span class="bottom-nav__label">ホーム</span>
-    </button>
-    <button class="bottom-nav__item" type="button">
-      <span class="bottom-nav__icon">🛒</span>
-      <span class="bottom-nav__label">買い物リスト</span>
-    </button>
-    <button class="bottom-nav__item" type="button">
-      <span class="bottom-nav__icon">⚙</span>
-      <span class="bottom-nav__label">設定</span>
-    </button>
-  </nav>
+    <button id="fab-add-item" class="fab" type="button" aria-label="アイテムを追加">＋</button>
+
+    <nav class="bottom-nav">
+      <button class="bottom-nav__item is-active" type="button">
+        <span class="bottom-nav__icon">🏠</span>
+        <span class="bottom-nav__label">ホーム</span>
+      </button>
+      <button class="bottom-nav__item" type="button">
+        <span class="bottom-nav__icon">🛒</span>
+        <span class="bottom-nav__label">買い物リスト</span>
+      </button>
+      <button class="bottom-nav__item" type="button">
+        <span class="bottom-nav__icon">⚙</span>
+        <span class="bottom-nav__label">設定</span>
+      </button>
+    </nav>
+  </section>
+
+  <!-- S4: アイテム登録・編集画面 -->
+  <section id="screen-item-form" class="screen" hidden>
+    <header class="app-header">
+      <button id="item-form-cancel" class="app-header__back" type="button" aria-label="キャンセル">←</button>
+      <span id="item-form-title" class="app-header__title">アイテムを追加</span>
+      <button id="item-form-save" class="app-header__save" type="button">保存</button>
+    </header>
+
+    <main class="app-main">
+      <div class="item-form__icon-preview-wrap">
+        <div id="item-form-icon-preview" class="item-tile__icon item-form__icon-preview"></div>
+        <p class="item-form__icon-hint">アイコンはステップ12以降で変更できるようになります</p>
+      </div>
+
+      <label class="item-form__field">
+        <span class="item-form__label">アイテム名</span>
+        <input id="item-form-name" class="item-form__input" type="text" placeholder="例：牛乳">
+      </label>
+
+      <div class="item-form__field">
+        <span class="item-form__label">カテゴリ</span>
+        <div id="item-form-category" class="item-form__chip-group"></div>
+      </div>
+
+      <div class="item-form__field">
+        <span class="item-form__label">在庫状態</span>
+        <div id="item-form-status" class="item-form__chip-group"></div>
+      </div>
+
+      <label class="item-form__field">
+        <span class="item-form__label">メモ（任意）</span>
+        <textarea id="item-form-memo" class="item-form__textarea" rows="3" placeholder="例：〇〇スーパーの安いやつ"></textarea>
+      </label>
+
+      <button id="item-form-delete" class="item-form__delete" type="button" hidden>このアイテムを削除</button>
+    </main>
+  </section>
 
   <script src="script.js"></script>
 </body>

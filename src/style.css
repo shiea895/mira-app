@@ -180,3 +180,126 @@ body {
 .item-tile__category-badge--other {
   background: #888888;
 }
+
+/* フローティングアクションボタン（S2ホーム画面） */
+.fab {
+  position: fixed;
+  right: 20px;
+  bottom: calc(64px + 20px);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: #2d7cf0;
+  color: #ffffff;
+  font-size: 26px;
+  line-height: 1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  z-index: 11;
+}
+
+/* 画面切り替え: hidden属性が付いた画面は非表示 */
+.screen[hidden] {
+  display: none;
+}
+
+/* S4: アイテム登録・編集画面 */
+.app-header__back {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px 8px;
+  margin-left: -8px;
+}
+
+.app-header__save {
+  background: none;
+  border: none;
+  font-size: 15px;
+  font-weight: bold;
+  color: #2d7cf0;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.item-form__icon-preview-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.item-form__icon-preview {
+  width: 96px;
+  font-size: 36px;
+}
+
+.item-form__icon-hint {
+  margin: 8px 0 0;
+  font-size: 11px;
+  color: #999;
+  text-align: center;
+}
+
+.item-form__field {
+  display: block;
+  margin-bottom: 20px;
+}
+
+.item-form__label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: #666;
+}
+
+.item-form__input,
+.item-form__textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #ffffff;
+  font-size: 15px;
+  font-family: inherit;
+}
+
+.item-form__textarea {
+  resize: vertical;
+}
+
+.item-form__chip-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.item-form__chip {
+  padding: 8px 16px;
+  border-radius: 16px;
+  border: 1px solid #ddd;
+  background: #ffffff;
+  color: #555;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.item-form__chip.is-selected {
+  background: #2d7cf0;
+  border-color: #2d7cf0;
+  color: #ffffff;
+}
+
+.item-form__delete {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
+  border: 1px solid #e57373;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #d23;
+  font-size: 14px;
+  cursor: pointer;
+}
