@@ -84,45 +84,26 @@ function addIconToHistory(url) {
 
 let iconHistory = loadIconHistory();
 
-// カテゴリ（ステップ11: S6で追加・削除・並び替えができる）
-const CATEGORY_STORAGE_KEY = "mira-app:categories";
-const DEFAULT_CATEGORIES = [
-  { id: "food", name: "食品", color: "#e08a2c" },
-  { id: "daily", name: "日用品", color: "#2d7cf0" },
-  { id: "other", name: "その他", color: "#888888" },
+// カテゴリ（固定3種。アプリ内での追加・編集はできない）
+const CATEGORIES = [
+  { name: "食品", label: "食", color: "#e08a2c" },
+  { name: "日用品", label: "日", color: "#2d7cf0" },
+  { name: "その他", label: "他", color: "#009688" }, // 在庫切れ時のグレーアウト表示と紛らわしくならないよう、グレー以外の色にしている
 ];
-const CATEGORY_COLOR_PALETTE = [
-  "#e08a2c", "#2d7cf0", "#43a047", "#8e24aa", "#d23c3c", "#009688", "#795548",
-];
+// 万一、過去に存在したカテゴリ名などCATEGORIESに無い値が付いたアイテムがあった場合のフォールバック表示
 const DEFAULT_CATEGORY_BADGE = { label: "他", color: "#888888" };
 
-function loadCategories() {
-  try {
-    const raw = localStorage.getItem(CATEGORY_STORAGE_KEY);
-    if (raw) {
-      return JSON.parse(raw);
-    }
-  } catch (error) {
-    console.error("カテゴリの読み込みに失敗しました", error);
-  }
-  return DEFAULT_CATEGORIES.map((category) => ({ ...category }));
-}
-
-function saveCategories() {
-  safeLocalStorageSet(CATEGORY_STORAGE_KEY, JSON.stringify(categories));
-}
-
-function generateCategoryId() {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-}
-
-let categories = loadCategories();
-saveCategories();
+// 旧バージョン(カテゴリ管理機能)で使っていたデータが残っていれば削除する
+localStorage.removeItem("mira-app:categories");
 
 function getCategoryBadge(categoryName) {
-  const category = categories.find((c) => c.name === categoryName);
-  if (!category) return DEFAULT_CATEGORY_BADGE;
-  return { label: category.name.charAt(0), color: category.color };
+  const category = CATEGORIES.find((c) => c.name === categoryName);
+  return category ? { label: category.label, color: category.color } : DEFAULT_CATEGORY_BADGE;
+}
+
+function getCategoryOrderIndex(categoryName) {
+  const index = CATEGORIES.findIndex((c) => c.name === categoryName);
+  return index === -1 ? CATEGORIES.length : index;
 }
 
 const STATUS_OPTIONS = [
@@ -130,21 +111,25 @@ const STATUS_OPTIONS = [
   { value: "need_to_buy", label: "在庫切れ・要購入" },
 ];
 
-const ALL_CATEGORIES_LABEL = "すべて";
+const IN_STOCK_LABEL = "在庫あり";
 const OUT_OF_STOCK_LABEL = "在庫切れ";
 
 function getCategoryTabs() {
-  return [ALL_CATEGORIES_LABEL, OUT_OF_STOCK_LABEL, ...categories.map((c) => c.name)];
+  return [IN_STOCK_LABEL, OUT_OF_STOCK_LABEL, ...CATEGORIES.map((c) => c.name)];
 }
 
-let currentCategory = ALL_CATEGORIES_LABEL;
+let currentCategory = OUT_OF_STOCK_LABEL; // 初期表示は「在庫切れ」タブ
 
 function getFilteredItems() {
-  if (currentCategory === ALL_CATEGORIES_LABEL) {
-    return items;
+  if (currentCategory === IN_STOCK_LABEL) {
+    return items
+      .filter((item) => item.status === "in_stock")
+      .sort((a, b) => getCategoryOrderIndex(a.category) - getCategoryOrderIndex(b.category));
   }
   if (currentCategory === OUT_OF_STOCK_LABEL) {
-    return items.filter((item) => item.status === "need_to_buy");
+    return items
+      .filter((item) => item.status === "need_to_buy")
+      .sort((a, b) => getCategoryOrderIndex(a.category) - getCategoryOrderIndex(b.category));
   }
   return items.filter((item) => item.category === currentCategory);
 }
@@ -152,7 +137,7 @@ function getFilteredItems() {
 function renderCategoryTabs() {
   const tabs = getCategoryTabs();
   if (!tabs.includes(currentCategory)) {
-    currentCategory = ALL_CATEGORIES_LABEL;
+    currentCategory = OUT_OF_STOCK_LABEL;
   }
 
   const container = document.getElementById("category-tabs");
@@ -382,102 +367,6 @@ document.querySelectorAll(".bottom-nav__item[data-screen]").forEach((btn) => {
   btn.addEventListener("click", () => navigateTo(btn.dataset.screen));
 });
 
-// S6 カテゴリ管理画面
-function openCategoryManage() {
-  renderCategoryManageList();
-  showScreen("screen-category-manage");
-}
-
-function closeCategoryManage() {
-  showScreen("screen-home");
-  renderCategoryTabs();
-  renderItemList(getFilteredItems());
-}
-
-function moveCategory(index, direction) {
-  const target = index + direction;
-  if (target < 0 || target >= categories.length) return;
-  [categories[index], categories[target]] = [categories[target], categories[index]];
-  saveCategories();
-  renderCategoryManageList();
-}
-
-function deleteCategory(index) {
-  if (categories.length <= 1) {
-    alert("最後のカテゴリは削除できません");
-    return;
-  }
-  if (!window.confirm(`「${categories[index].name}」を削除しますか？`)) return;
-  categories.splice(index, 1);
-  saveCategories();
-  renderCategoryManageList();
-}
-
-function addCategory() {
-  const input = document.getElementById("category-manage-input");
-  const name = input.value.trim();
-  if (!name) return;
-  if (categories.some((c) => c.name === name)) {
-    alert("同じ名前のカテゴリが既にあります");
-    return;
-  }
-  categories.push({
-    id: generateCategoryId(),
-    name,
-    color: CATEGORY_COLOR_PALETTE[categories.length % CATEGORY_COLOR_PALETTE.length],
-  });
-  saveCategories();
-  input.value = "";
-  renderCategoryManageList();
-}
-
-function renderCategoryManageList() {
-  const container = document.getElementById("category-manage-list");
-  container.innerHTML = "";
-
-  categories.forEach((category, index) => {
-    const row = document.createElement("div");
-    row.className = "category-manage-row";
-
-    const badge = document.createElement("span");
-    badge.className = "category-manage-row__badge";
-    badge.style.backgroundColor = category.color;
-    badge.textContent = category.name.charAt(0);
-
-    const name = document.createElement("span");
-    name.className = "category-manage-row__name";
-    name.textContent = category.name;
-
-    const upBtn = document.createElement("button");
-    upBtn.type = "button";
-    upBtn.className = "category-manage-row__move";
-    upBtn.textContent = "↑";
-    upBtn.disabled = index === 0;
-    upBtn.addEventListener("click", () => moveCategory(index, -1));
-
-    const downBtn = document.createElement("button");
-    downBtn.type = "button";
-    downBtn.className = "category-manage-row__move";
-    downBtn.textContent = "↓";
-    downBtn.disabled = index === categories.length - 1;
-    downBtn.addEventListener("click", () => moveCategory(index, 1));
-
-    const deleteBtn = document.createElement("button");
-    deleteBtn.type = "button";
-    deleteBtn.className = "category-manage-row__delete";
-    deleteBtn.textContent = "🗑";
-    deleteBtn.setAttribute("aria-label", `${category.name}を削除`);
-    deleteBtn.addEventListener("click", () => deleteCategory(index));
-
-    row.append(badge, name, upBtn, downBtn, deleteBtn);
-    container.appendChild(row);
-  });
-}
-
-document.getElementById("category-manage-btn").addEventListener("click", openCategoryManage);
-document.getElementById("category-manage-back").addEventListener("click", closeCategoryManage);
-document.getElementById("category-manage-add-btn").addEventListener("click", addCategory);
-
 // S4 アイテム登録・編集画面
 let formState = null; // { id, name, category, status, memo, iconUrl } / idがnullなら新規追加
 
@@ -494,7 +383,7 @@ function openItemForm(item) {
     : {
         id: null,
         name: "",
-        category: categories[0] ? categories[0].name : "",
+        category: CATEGORIES[0].name,
         status: "in_stock",
         memo: "",
         iconUrl: null,
@@ -532,7 +421,7 @@ function renderItemFormCategoryChips() {
   const container = document.getElementById("item-form-category");
   container.innerHTML = "";
 
-  for (const category of categories) {
+  for (const category of CATEGORIES) {
     const chip = document.createElement("button");
     chip.type = "button";
     chip.className =
