@@ -362,6 +362,11 @@ document.querySelectorAll(".bottom-nav__item[data-screen]").forEach((btn) => {
   btn.addEventListener("click", () => navigateTo(btn.dataset.screen));
 });
 
+// 設定画面(S7)は未実装。実装までは案内のみ表示する
+document.querySelectorAll(".js-settings-btn").forEach((btn) => {
+  btn.addEventListener("click", () => alert("設定機能は後日実装予定です"));
+});
+
 // S4 アイテム登録・編集画面
 let formState = null; // { id, name, category, status, memo, iconUrl } / idがnullなら新規追加
 
