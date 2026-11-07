@@ -626,39 +626,69 @@ body {
   cursor: pointer;
 }
 
-/* 設定案内用トースト（FABボタンと重ならないよう左右の置き場所を分けている） */
-.toast {
+/* 設定案内用ボトムシート */
+.sheet-overlay {
   position: fixed;
-  left: 16px;
-  right: 86px;
-  bottom: calc(64px + 16px);
-  transform: translateY(10px);
+  inset: 0;
+  background: rgba(63, 74, 68, 0.4);
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
-  gap: 8px;
-  padding: 12px 16px;
-  border-radius: 24px;
-  background: var(--color-primary);
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: bold;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease;
   z-index: 50;
 }
 
-.toast[hidden] {
+.sheet-overlay[hidden] {
   display: none;
 }
 
-.toast.is-visible {
-  opacity: 1;
-  transform: translateY(0);
+.sheet-card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--color-surface);
+  border-radius: 24px 24px 0 0;
+  padding: 10px 22px 28px;
+  text-align: center;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.15);
+  animation: sheet-slide-up 0.25s ease-out;
 }
 
-.toast__icon {
-  font-size: 18px;
+@keyframes sheet-slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.sheet-card__handle {
+  width: 36px;
+  height: 4px;
+  margin: 4px auto 16px;
+  border-radius: 2px;
+  background: var(--color-border);
+}
+
+.sheet-card__icon {
+  font-size: 36px;
+  color: var(--color-primary);
+  margin-bottom: 8px;
+}
+
+.sheet-card__text {
+  margin: 0 0 20px;
+  font-size: 15px;
+  color: var(--color-text);
+}
+
+.sheet-card__close-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 24px;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
 }
