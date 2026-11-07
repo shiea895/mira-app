@@ -148,7 +148,7 @@ body {
 .item-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px 10px;
+  gap: 16px 15px;
 }
 
 .item-tile {
