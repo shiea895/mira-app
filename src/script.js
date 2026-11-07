@@ -111,25 +111,20 @@ const STATUS_OPTIONS = [
   { value: "need_to_buy", label: "在庫切れ・要購入" },
 ];
 
-const IN_STOCK_LABEL = "在庫あり";
-const OUT_OF_STOCK_LABEL = "在庫切れ";
+const ALL_CATEGORIES_LABEL = "すべて";
 
 function getCategoryTabs() {
-  return [IN_STOCK_LABEL, OUT_OF_STOCK_LABEL, ...CATEGORIES.map((c) => c.name)];
+  return [ALL_CATEGORIES_LABEL, ...CATEGORIES.map((c) => c.name)];
 }
 
-let currentCategory = OUT_OF_STOCK_LABEL; // 初期表示は「在庫切れ」タブ
+let currentCategory = ALL_CATEGORIES_LABEL; // 初期表示は「すべて」タブ
 
 function getFilteredItems() {
-  if (currentCategory === IN_STOCK_LABEL) {
-    return items
-      .filter((item) => item.status === "in_stock")
-      .sort((a, b) => getCategoryOrderIndex(a.category) - getCategoryOrderIndex(b.category));
-  }
-  if (currentCategory === OUT_OF_STOCK_LABEL) {
-    return items
-      .filter((item) => item.status === "need_to_buy")
-      .sort((a, b) => getCategoryOrderIndex(a.category) - getCategoryOrderIndex(b.category));
+  if (currentCategory === ALL_CATEGORIES_LABEL) {
+    // カテゴリをまたいで表示するので、食品→日用品→その他の順に揃える
+    return [...items].sort(
+      (a, b) => getCategoryOrderIndex(a.category) - getCategoryOrderIndex(b.category)
+    );
   }
   return items.filter((item) => item.category === currentCategory);
 }
@@ -137,7 +132,7 @@ function getFilteredItems() {
 function renderCategoryTabs() {
   const tabs = getCategoryTabs();
   if (!tabs.includes(currentCategory)) {
-    currentCategory = OUT_OF_STOCK_LABEL;
+    currentCategory = ALL_CATEGORIES_LABEL;
   }
 
   const container = document.getElementById("category-tabs");
