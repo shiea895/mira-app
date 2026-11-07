@@ -228,6 +228,19 @@ function renderItemTile(item) {
 
   name.append(badge, nameText);
 
+  if (item.memo) {
+    const memoButton = document.createElement("button");
+    memoButton.type = "button";
+    memoButton.className = "item-tile__memo-btn";
+    memoButton.textContent = "📝";
+    memoButton.setAttribute("aria-label", `${item.name}のメモを見る`);
+    memoButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      alert(`${item.name}のメモ\n\n${item.memo}`);
+    });
+    name.appendChild(memoButton);
+  }
+
   tile.append(iconWrap, name);
   return tile;
 }
@@ -289,11 +302,22 @@ function renderShoppingItemRow(item) {
   icon.className = "shopping-item__icon";
   setIconVisual(icon, item);
 
+  const nameWrap = document.createElement("div");
+  nameWrap.className = "shopping-item__name-wrap";
+
   const name = document.createElement("span");
   name.className = "shopping-item__name";
   name.textContent = item.name;
+  nameWrap.appendChild(name);
 
-  row.append(checkbox, icon, name);
+  if (item.memo) {
+    const memo = document.createElement("span");
+    memo.className = "shopping-item__memo";
+    memo.textContent = item.memo;
+    nameWrap.appendChild(memo);
+  }
+
+  row.append(checkbox, icon, nameWrap);
   return row;
 }
 

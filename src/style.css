@@ -192,6 +192,16 @@ body {
   white-space: nowrap;
 }
 
+.item-tile__memo-btn {
+  flex-shrink: 0;
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+}
+
 .item-tile__category-badge {
   flex-shrink: 0;
   display: inline-flex;
@@ -285,16 +295,29 @@ body {
   object-fit: cover;
 }
 
-.shopping-item__name {
+.shopping-item__name-wrap {
   flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.shopping-item__name {
   font-size: 15px;
+}
+
+.shopping-item__memo {
+  font-size: 12px;
+  color: #888;
 }
 
 .shopping-item.is-checked {
   background: #eef6ee;
 }
 
-.shopping-item.is-checked .shopping-item__name {
+.shopping-item.is-checked .shopping-item__name,
+.shopping-item.is-checked .shopping-item__memo {
   color: #999;
   text-decoration: line-through;
 }
