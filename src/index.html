@@ -140,6 +140,25 @@
     </main>
   </section>
 
+  <!-- メモ確認用モーダル -->
+  <div id="memo-modal-overlay" class="modal-overlay" hidden>
+    <div class="modal-card">
+      <span class="modal-card__icon material-symbols-rounded">sticky_note_2</span>
+      <p id="memo-modal-text" class="modal-card__text"></p>
+      <button id="memo-modal-close" class="modal-card__close-btn" type="button">閉じる</button>
+    </div>
+  </div>
+
+  <!-- 設定案内用ボトムシート -->
+  <div id="settings-sheet-overlay" class="sheet-overlay" hidden>
+    <div class="sheet-card">
+      <div class="sheet-card__handle"></div>
+      <span class="sheet-card__icon material-symbols-rounded">settings</span>
+      <p class="sheet-card__text">設定機能は後日実装予定です</p>
+      <button id="settings-sheet-close" class="sheet-card__close-btn" type="button">閉じる</button>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>

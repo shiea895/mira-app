@@ -238,7 +238,7 @@ function renderItemTile(item) {
     memoButton.setAttribute("aria-label", `${item.name}のメモを見る`);
     memoButton.addEventListener("click", (event) => {
       event.stopPropagation();
-      alert(`${item.name}のメモ\n\n${item.memo}`);
+      openMemoModal(item.name, item.memo);
     });
     name.appendChild(memoButton);
   }
@@ -388,9 +388,37 @@ document.querySelectorAll(".bottom-nav__item[data-screen]").forEach((btn) => {
   btn.addEventListener("click", () => navigateTo(btn.dataset.screen));
 });
 
-// 設定画面(S7)は未実装。実装までは案内のみ表示する
+// メモ確認用モーダル
+function openMemoModal(itemName, memo) {
+  document.getElementById("memo-modal-text").textContent = `${itemName}のメモ\n\n${memo}`;
+  document.getElementById("memo-modal-overlay").hidden = false;
+}
+
+function closeMemoModal() {
+  document.getElementById("memo-modal-overlay").hidden = true;
+}
+
+document.getElementById("memo-modal-close").addEventListener("click", closeMemoModal);
+document.getElementById("memo-modal-overlay").addEventListener("click", (event) => {
+  if (event.target.id === "memo-modal-overlay") closeMemoModal();
+});
+
+// 設定画面(S7)は未実装。実装までは案内のボトムシートのみ表示する
+function openSettingsSheet() {
+  document.getElementById("settings-sheet-overlay").hidden = false;
+}
+
+function closeSettingsSheet() {
+  document.getElementById("settings-sheet-overlay").hidden = true;
+}
+
+document.getElementById("settings-sheet-close").addEventListener("click", closeSettingsSheet);
+document.getElementById("settings-sheet-overlay").addEventListener("click", (event) => {
+  if (event.target.id === "settings-sheet-overlay") closeSettingsSheet();
+});
+
 document.querySelectorAll(".js-settings-btn").forEach((btn) => {
-  btn.addEventListener("click", () => alert("設定機能は後日実装予定です"));
+  btn.addEventListener("click", openSettingsSheet);
 });
 
 // S4 アイテム登録・編集画面
