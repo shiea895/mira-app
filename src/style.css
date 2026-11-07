@@ -1,17 +1,17 @@
 :root {
-  /* パステル配色の基本パレット */
-  --color-bg: #f7f1f6;
+  /* パステル配色の基本パレット（グリーン系） */
+  --color-bg: #e9f5ec;
   --color-surface: #ffffff;
-  --color-text: #4a4458;
-  --color-text-secondary: #6b6476;
-  --color-text-soft: #8a8296;
-  --color-text-faint: #b0a8bc;
-  --color-border: #e8e1ec;
-  --color-primary: #4a7fd6;
-  --color-primary-soft: #dce8fb;
+  --color-text: #3f4a44;
+  --color-text-secondary: #5c6a62;
+  --color-text-soft: #7c8c82;
+  --color-text-faint: #a9b7ae;
+  --color-border: #dcebe0;
+  --color-primary: #3f8c5e;
+  --color-primary-soft: #dcefe0;
   --color-danger: #c9607a;
   --color-danger-border: #f0c6d1;
-  --color-success-bg: #e3f5ec;
+  --color-success-bg: #cdebd4;
 }
 
 * {
