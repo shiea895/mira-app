@@ -203,9 +203,9 @@ function renderItemTile(item) {
 
   const editButton = document.createElement("button");
   editButton.type = "button";
-  editButton.className = "item-tile__edit-btn";
+  editButton.className = "item-tile__edit-btn material-symbols-rounded";
   editButton.setAttribute("aria-label", `${item.name}を編集`);
-  editButton.textContent = "✎";
+  editButton.textContent = "edit";
   editButton.addEventListener("click", (event) => {
     event.stopPropagation();
     openItemForm(item);
@@ -233,8 +233,8 @@ function renderItemTile(item) {
   if (item.memo) {
     const memoButton = document.createElement("button");
     memoButton.type = "button";
-    memoButton.className = "item-tile__memo-btn";
-    memoButton.textContent = "📝";
+    memoButton.className = "item-tile__memo-btn material-symbols-rounded";
+    memoButton.textContent = "sticky_note_2";
     memoButton.setAttribute("aria-label", `${item.name}のメモを見る`);
     memoButton.addEventListener("click", (event) => {
       event.stopPropagation();
