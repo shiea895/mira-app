@@ -85,20 +85,21 @@ function addIconToHistory(url) {
 let iconHistory = loadIconHistory();
 
 // カテゴリ（固定3種。アプリ内での追加・編集はできない）
+// パステル配色: 淡い背景(bg) + 同系色の濃いめ文字(color)の組み合わせ
 const CATEGORIES = [
-  { name: "食品", label: "食", color: "#e08a2c" },
-  { name: "日用品", label: "日", color: "#2d7cf0" },
-  { name: "その他", label: "他", color: "#009688" }, // 在庫切れ時のグレーアウト表示と紛らわしくならないよう、グレー以外の色にしている
+  { name: "食品", label: "食", bg: "#ffe3c2", color: "#b8631a" },
+  { name: "日用品", label: "日", bg: "#d6e6fb", color: "#4a77b4" },
+  { name: "その他", label: "他", bg: "#cfeee3", color: "#2e8c73" }, // 在庫切れ時のグレーアウト表示と紛らわしくならないよう、グレー以外の色にしている
 ];
 // 万一、過去に存在したカテゴリ名などCATEGORIESに無い値が付いたアイテムがあった場合のフォールバック表示
-const DEFAULT_CATEGORY_BADGE = { label: "他", color: "#888888" };
+const DEFAULT_CATEGORY_BADGE = { label: "他", bg: "#eceaf0", color: "#8a8296" };
 
 // 旧バージョン(カテゴリ管理機能)で使っていたデータが残っていれば削除する
 localStorage.removeItem("mira-app:categories");
 
 function getCategoryBadge(categoryName) {
   const category = CATEGORIES.find((c) => c.name === categoryName);
-  return category ? { label: category.label, color: category.color } : DEFAULT_CATEGORY_BADGE;
+  return category || DEFAULT_CATEGORY_BADGE;
 }
 
 function getCategoryOrderIndex(categoryName) {
@@ -218,7 +219,8 @@ function renderItemTile(item) {
   const categoryBadge = getCategoryBadge(item.category);
   const badge = document.createElement("span");
   badge.className = "item-tile__category-badge";
-  badge.style.backgroundColor = categoryBadge.color;
+  badge.style.backgroundColor = categoryBadge.bg;
+  badge.style.color = categoryBadge.color;
   badge.textContent = categoryBadge.label;
 
   const nameText = document.createElement("span");
