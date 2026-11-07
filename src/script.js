@@ -403,22 +403,26 @@ document.getElementById("memo-modal-overlay").addEventListener("click", (event) 
   if (event.target.id === "memo-modal-overlay") closeMemoModal();
 });
 
-// 設定画面(S7)は未実装。実装までは案内のボトムシートのみ表示する
-function openSettingsSheet() {
-  document.getElementById("settings-sheet-overlay").hidden = false;
-}
+// 設定画面(S7)は未実装。実装までは案内のトーストのみ表示する
+let settingsToastTimer = null;
 
-function closeSettingsSheet() {
-  document.getElementById("settings-sheet-overlay").hidden = true;
-}
+function showSettingsToast() {
+  const toast = document.getElementById("settings-toast");
+  toast.hidden = false;
+  void toast.offsetWidth; // 連続タップ時もフェードが再生されるように強制的に再描画させる
+  toast.classList.add("is-visible");
 
-document.getElementById("settings-sheet-close").addEventListener("click", closeSettingsSheet);
-document.getElementById("settings-sheet-overlay").addEventListener("click", (event) => {
-  if (event.target.id === "settings-sheet-overlay") closeSettingsSheet();
-});
+  clearTimeout(settingsToastTimer);
+  settingsToastTimer = setTimeout(() => {
+    toast.classList.remove("is-visible");
+    setTimeout(() => {
+      toast.hidden = true;
+    }, 250);
+  }, 2200);
+}
 
 document.querySelectorAll(".js-settings-btn").forEach((btn) => {
-  btn.addEventListener("click", openSettingsSheet);
+  btn.addEventListener("click", showSettingsToast);
 });
 
 // S4 アイテム登録・編集画面
