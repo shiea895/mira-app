@@ -58,6 +58,8 @@ body {
   width: 26px;
   height: 26px;
   margin-left: 6px;
+  position: relative;
+  top: 3px;
 }
 
 .app-header__count {
