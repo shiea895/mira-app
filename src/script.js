@@ -2,6 +2,21 @@ console.log("買い物リストアプリ: 読み込み完了");
 
 const STORAGE_KEY = "mira-app:items";
 
+// localStorageへの書き込みをtry/catchで保護する。写真データなどで保存容量の上限を
+// 超えた場合でも例外で処理が止まらないようにし、ユーザーには保存失敗を知らせる。
+function safeLocalStorageSet(key, value) {
+  try {
+    localStorage.setItem(key, value);
+    return true;
+  } catch (error) {
+    console.error(`保存に失敗しました (${key})`, error);
+    alert(
+      "保存に失敗しました。写真のサイズが大きいか、この端末の保存容量の上限に達している可能性があります。"
+    );
+    return false;
+  }
+}
+
 // 初回起動時のみ使う初期データ（localStorageに何も無い場合のみ使用）
 const DEFAULT_ITEMS = [
   { id: "1", name: "牛乳", category: "食品", status: "need_to_buy", memo: "" },
@@ -28,7 +43,7 @@ function loadItems() {
 }
 
 function saveItems() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  safeLocalStorageSet(STORAGE_KEY, JSON.stringify(items));
 }
 
 function generateItemId() {
@@ -55,7 +70,7 @@ function loadIconHistory() {
 }
 
 function saveIconHistory() {
-  localStorage.setItem(ICON_HISTORY_STORAGE_KEY, JSON.stringify(iconHistory));
+  safeLocalStorageSet(ICON_HISTORY_STORAGE_KEY, JSON.stringify(iconHistory));
 }
 
 // 選択されたアイコンを履歴の先頭に追加する(既にあれば先頭へ移動するだけ)
@@ -94,7 +109,7 @@ function loadCategories() {
 }
 
 function saveCategories() {
-  localStorage.setItem(CATEGORY_STORAGE_KEY, JSON.stringify(categories));
+  safeLocalStorageSet(CATEGORY_STORAGE_KEY, JSON.stringify(categories));
 }
 
 function generateCategoryId() {
@@ -650,12 +665,43 @@ function readFileAsDataUrl(file) {
   });
 }
 
+function loadImageElement(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error("画像の読み込みに失敗しました"));
+    img.src = src;
+  });
+}
+
+// カメラ写真は数MBになることがあり、localStorageの保存容量をすぐに圧迫してしまう。
+// 保存前に正方形・小サイズへ縮小してからJPEG圧縮することで、保存できる枚数を大きく増やす。
+const ICON_MAX_SIZE = 200;
+const ICON_JPEG_QUALITY = 0.7;
+
+async function resizeImageFileToDataUrl(file) {
+  const originalDataUrl = await readFileAsDataUrl(file);
+  const img = await loadImageElement(originalDataUrl);
+
+  const sourceSize = Math.min(img.naturalWidth, img.naturalHeight);
+  const sx = (img.naturalWidth - sourceSize) / 2;
+  const sy = (img.naturalHeight - sourceSize) / 2;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = ICON_MAX_SIZE;
+  canvas.height = ICON_MAX_SIZE;
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(img, sx, sy, sourceSize, sourceSize, 0, 0, ICON_MAX_SIZE, ICON_MAX_SIZE);
+
+  return canvas.toDataURL("image/jpeg", ICON_JPEG_QUALITY);
+}
+
 async function handleIconFileSelected(event) {
   const file = event.target.files[0];
   event.target.value = ""; // 同じファイルを連続で選んだ時も change イベントが発火するように
   if (!file) return;
 
-  const dataUrl = await readFileAsDataUrl(file);
+  const dataUrl = await resizeImageFileToDataUrl(file);
   iconPickerTempUrl = dataUrl;
   renderIconPickerPreview();
 }
