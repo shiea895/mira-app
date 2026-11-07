@@ -44,12 +44,20 @@ body {
 .app-header__title {
   font-size: 24px;
   font-weight: bold;
+  display: flex;
+  align-items: center;
 }
 
 /* アプリ名(わが家の倉庫番)だけ特徴的な丸ゴシック系フォントにする */
 #screen-home .app-header__title {
   font-family: "Mochiy Pop One", sans-serif;
   font-weight: 700;
+}
+
+.app-header__title-icon {
+  width: 26px;
+  height: 26px;
+  margin-left: 6px;
 }
 
 .app-header__count {
