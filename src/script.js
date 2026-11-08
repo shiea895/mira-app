@@ -390,7 +390,8 @@ document.querySelectorAll(".bottom-nav__item[data-screen]").forEach((btn) => {
 
 // メモ確認用モーダル
 function openMemoModal(itemName, memo) {
-  document.getElementById("memo-modal-text").textContent = `${itemName}のメモ\n\n${memo}`;
+  document.getElementById("memo-modal-title").textContent = itemName ? `${itemName}のメモ` : "アイテム名なしのメモ";
+  document.getElementById("memo-modal-text").textContent = memo;
   document.getElementById("memo-modal-overlay").hidden = false;
 }
 
