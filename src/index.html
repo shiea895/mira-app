@@ -96,8 +96,14 @@
       </div>
 
       <div class="icon-picker__actions">
-        <button id="icon-picker-camera-btn" class="icon-picker__action-btn" type="button">📷 カメラで撮影</button>
-        <button id="icon-picker-file-btn" class="icon-picker__action-btn" type="button">🖼 写真から選択</button>
+        <button id="icon-picker-camera-btn" class="icon-picker__action-btn" type="button">
+          <span class="material-symbols-rounded icon-picker__action-icon">photo_camera</span>
+          カメラで撮影
+        </button>
+        <button id="icon-picker-file-btn" class="icon-picker__action-btn" type="button">
+          <span class="material-symbols-rounded icon-picker__action-icon">photo_library</span>
+          写真から選択
+        </button>
       </div>
       <input id="icon-picker-camera-input" type="file" accept="image/*" capture="environment" hidden>
       <input id="icon-picker-file-input" type="file" accept="image/*" hidden>
