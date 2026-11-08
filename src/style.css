@@ -179,6 +179,7 @@ body {
   width: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 12px;
+  border: 1px solid var(--color-text-faint);
   background: var(--color-primary-soft);
   color: var(--color-primary);
   display: flex;
@@ -342,6 +343,7 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 8px;
+  border: 1px solid var(--color-text-faint);
   background: var(--color-primary-soft);
   color: var(--color-primary);
   font-weight: bold;
@@ -430,7 +432,6 @@ body {
 .item-form__icon-preview {
   width: 96px;
   font-size: 36px;
-  border: none;
   padding: 0;
   overflow: hidden;
   cursor: pointer;
@@ -558,7 +559,7 @@ body {
   width: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 8px;
-  border: 2px solid transparent;
+  border: 2px solid var(--color-text-faint);
   overflow: hidden;
   padding: 0;
   cursor: pointer;
