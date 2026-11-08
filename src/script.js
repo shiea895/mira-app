@@ -512,8 +512,8 @@ function renderItemFormStatusChips() {
 
 function saveItemForm() {
   const name = formState.name.trim();
-  if (!name) {
-    alert("アイテム名を入力してください");
+  if (!name && !formState.iconUrl) {
+    alert("アイテム名を入力するか、画像を設定してください");
     return;
   }
 
