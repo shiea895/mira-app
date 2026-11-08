@@ -327,7 +327,9 @@ function renderShoppingList() {
   const container = document.getElementById("shopping-list");
   container.innerHTML = "";
 
-  const shoppingItems = items.filter((item) => item.status === "need_to_buy");
+  const shoppingItems = items
+    .filter((item) => item.status === "need_to_buy")
+    .sort((a, b) => getCategoryOrderIndex(a.category) - getCategoryOrderIndex(b.category));
   document.getElementById("shopping-count").textContent =
     shoppingItems.length > 0 ? `${shoppingItems.length}件` : "";
 

@@ -319,8 +319,8 @@ body {
 .shopping-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px;
+  gap: 14px;
+  padding: 14px;
   margin-bottom: 8px;
   background: var(--color-surface);
   border-radius: 8px;
@@ -330,14 +330,14 @@ body {
 
 .shopping-item__checkbox {
   flex-shrink: 0;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
 }
 
 .shopping-item__icon {
   flex-shrink: 0;
-  width: 36px;
-  height: 36px;
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -345,7 +345,7 @@ body {
   background: var(--color-primary-soft);
   color: var(--color-primary);
   font-weight: bold;
-  font-size: 14px;
+  font-size: 18px;
   overflow: hidden;
 }
 
@@ -364,11 +364,11 @@ body {
 }
 
 .shopping-item__name {
-  font-size: 15px;
+  font-size: 18px;
 }
 
 .shopping-item__memo {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--color-text-soft);
 }
 
