@@ -176,6 +176,27 @@
     </div>
   </div>
 
+  <!-- アイテム削除確認用ボトムシート -->
+  <div id="delete-confirm-sheet-overlay" class="sheet-overlay" hidden>
+    <div class="sheet-card">
+      <div class="sheet-card__handle"></div>
+      <span class="sheet-card__icon sheet-card__icon--danger material-symbols-rounded">delete</span>
+      <p class="sheet-card__text">このアイテムを削除しますか？</p>
+      <button id="delete-confirm-sheet-confirm" class="sheet-card__delete-btn" type="button">削除する</button>
+      <button id="delete-confirm-sheet-cancel" class="sheet-card__close-btn" type="button">キャンセル</button>
+    </div>
+  </div>
+
+  <!-- 保存失敗時のお知らせ用ボトムシート -->
+  <div id="storage-error-sheet-overlay" class="sheet-overlay" hidden>
+    <div class="sheet-card">
+      <div class="sheet-card__handle"></div>
+      <span class="sheet-card__icon sheet-card__icon--danger material-symbols-rounded">error</span>
+      <p class="sheet-card__text">保存に失敗しました。写真のサイズが大きいか、この端末の保存容量の上限に達している可能性があります。</p>
+      <button id="storage-error-sheet-close" class="sheet-card__close-btn" type="button">閉じる</button>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>

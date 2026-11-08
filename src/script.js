@@ -10,9 +10,7 @@ function safeLocalStorageSet(key, value) {
     return true;
   } catch (error) {
     console.error(`保存に失敗しました (${key})`, error);
-    alert(
-      "保存に失敗しました。写真のサイズが大きいか、この端末の保存容量の上限に達している可能性があります。"
-    );
+    document.getElementById("storage-error-sheet-overlay").hidden = false;
     return false;
   }
 }
@@ -434,6 +432,23 @@ document.getElementById("settings-sheet-overlay").addEventListener("click", (eve
   if (event.target.id === "settings-sheet-overlay") closeSettingsSheet();
 });
 
+// アイテム削除確認用ボトムシート
+document.getElementById("delete-confirm-sheet-confirm").addEventListener("click", confirmDeleteItem);
+document.getElementById("delete-confirm-sheet-cancel").addEventListener("click", closeDeleteConfirmSheet);
+document.getElementById("delete-confirm-sheet-overlay").addEventListener("click", (event) => {
+  if (event.target.id === "delete-confirm-sheet-overlay") closeDeleteConfirmSheet();
+});
+
+// 保存失敗時のお知らせ用ボトムシート
+function closeStorageErrorSheet() {
+  document.getElementById("storage-error-sheet-overlay").hidden = true;
+}
+
+document.getElementById("storage-error-sheet-close").addEventListener("click", closeStorageErrorSheet);
+document.getElementById("storage-error-sheet-overlay").addEventListener("click", (event) => {
+  if (event.target.id === "storage-error-sheet-overlay") closeStorageErrorSheet();
+});
+
 document.querySelectorAll(".js-settings-btn").forEach((btn) => {
   btn.addEventListener("click", openSettingsSheet);
 });
@@ -561,10 +576,17 @@ function saveItemForm() {
 
 function deleteItemForm() {
   if (formState.id == null) return;
-  if (!window.confirm("このアイテムを削除しますか？")) return;
+  document.getElementById("delete-confirm-sheet-overlay").hidden = false;
+}
 
+function closeDeleteConfirmSheet() {
+  document.getElementById("delete-confirm-sheet-overlay").hidden = true;
+}
+
+function confirmDeleteItem() {
   items = items.filter((item) => item.id !== formState.id);
   saveItems();
+  closeDeleteConfirmSheet();
   closeItemForm();
   renderItemList(getFilteredItems());
 }
