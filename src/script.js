@@ -404,6 +404,20 @@ document.getElementById("memo-modal-overlay").addEventListener("click", (event) 
   if (event.target.id === "memo-modal-overlay") closeMemoModal();
 });
 
+// アイテム保存時の入力チェック用モーダル(メモ確認モーダルと同じ形式)
+function openValidationModal() {
+  document.getElementById("validation-modal-overlay").hidden = false;
+}
+
+function closeValidationModal() {
+  document.getElementById("validation-modal-overlay").hidden = true;
+}
+
+document.getElementById("validation-modal-close").addEventListener("click", closeValidationModal);
+document.getElementById("validation-modal-overlay").addEventListener("click", (event) => {
+  if (event.target.id === "validation-modal-overlay") closeValidationModal();
+});
+
 // 設定画面(S7)は未実装。実装までは案内のボトムシートのみ表示する
 function openSettingsSheet() {
   document.getElementById("settings-sheet-overlay").hidden = false;
@@ -514,7 +528,7 @@ function renderItemFormStatusChips() {
 function saveItemForm() {
   const name = formState.name.trim();
   if (!name && !formState.iconUrl) {
-    alert("アイテム名を入力するか、画像を設定してください");
+    openValidationModal();
     return;
   }
 
