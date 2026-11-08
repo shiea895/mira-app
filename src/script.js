@@ -213,6 +213,19 @@ function renderItemTile(item) {
 
   iconWrap.append(icon, editButton);
 
+  if (item.memo) {
+    const memoButton = document.createElement("button");
+    memoButton.type = "button";
+    memoButton.className = "item-tile__memo-btn material-symbols-rounded";
+    memoButton.textContent = "sticky_note_2";
+    memoButton.setAttribute("aria-label", `${item.name}のメモを見る`);
+    memoButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      openMemoModal(item.name, item.memo);
+    });
+    iconWrap.appendChild(memoButton);
+  }
+
   const name = document.createElement("div");
   name.className = "item-tile__name";
 
@@ -229,19 +242,6 @@ function renderItemTile(item) {
   nameText.title = item.name; // 省略表示時に長押し/ホバーで全文を確認できるように
 
   name.append(badge, nameText);
-
-  if (item.memo) {
-    const memoButton = document.createElement("button");
-    memoButton.type = "button";
-    memoButton.className = "item-tile__memo-btn material-symbols-rounded";
-    memoButton.textContent = "sticky_note_2";
-    memoButton.setAttribute("aria-label", `${item.name}のメモを見る`);
-    memoButton.addEventListener("click", (event) => {
-      event.stopPropagation();
-      openMemoModal(item.name, item.memo);
-    });
-    name.appendChild(memoButton);
-  }
 
   tile.append(iconWrap, name);
   return tile;
