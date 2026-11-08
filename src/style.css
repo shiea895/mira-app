@@ -417,13 +417,14 @@ body {
 }
 
 .app-header__save {
-  background: none;
+  background: var(--color-primary);
   border: none;
+  border-radius: 16px;
   font-size: 15px;
   font-weight: bold;
-  color: var(--color-primary);
+  color: #ffffff;
   cursor: pointer;
-  padding: 4px 8px;
+  padding: 6px 16px;
 }
 
 .item-form__icon-preview-wrap {
