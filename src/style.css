@@ -48,8 +48,9 @@ body {
   align-items: center;
 }
 
-/* アプリ名(わが家の倉庫)だけ特徴的な丸ゴシック系フォントにする */
-#screen-home .app-header__title {
+/* アプリ名・画面タイトルは特徴的な丸ゴシック系フォントで統一する */
+#screen-home .app-header__title,
+#screen-shopping .app-header__title {
   font-family: "Mochiy Pop One", sans-serif;
   font-weight: 700;
 }
